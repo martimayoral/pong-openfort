@@ -109,7 +109,7 @@ export class UI extends PIXI.Container {
     this.winText.y = CANVAS_HEIGHT / 2
     this.centerText.style.stroke = player == "green" ? 0x00ff00 : 0xff0000
     this.centerText.style.strokeThickness = 5
-    
+
   }
   reset() {
     this.winText?.destroy()
@@ -119,6 +119,8 @@ export class UI extends PIXI.Container {
 
     this.scoreText.green.text = "0"
     this.scoreText.red.text = "0"
+    this.scoreTextNeon.green.text = "0"
+    this.scoreTextNeon.red.text = "0"
   }
   setText(text: string) {
     this.centerText.text = text

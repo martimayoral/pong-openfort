@@ -20,26 +20,29 @@ export const PLAYER_MARGIN = 1 * PIXEL_SIZE
 
 export const BALL_SIZE = PIXEL_SIZE / 2
 
+export const WIN_CON = 10
 
 // Key codes
 export const KEY_CODE_UP = "w"
 export const KEY_CODE_DOWN = "s"
+export const KEY_CODE_UP_2 = "ArrowUp"
+export const KEY_CODE_DOWN_2 = "ArrowDown"
+export const KEY_RESTART = "r"
+
 export const gameHandler = new GameHandler()
 
 export class GameApp extends PIXI.Application<HTMLCanvasElement> {
   container!: SmartContainer
   pingPong!: PingPong
   ui!: UI
-  score: { [score in PlayerColor]: number }
-
-  waitingForReady!: boolean
+  keyboardControll: boolean
+  gameEnded: boolean
 
   constructor() {
     // super({ width: CANVAS_WIDTH, height: CANVAS_HEIGHT, background: 0xcccccc })
     super({ width: window.innerWidth, height: window.innerHeight, background: 0x323232 })
     document.body.appendChild(this.view)
 
-    this.score = { green: 0, red: 0 }
     PIXI.Assets.addBundle("assets", {
       font: k
     })
@@ -50,7 +53,10 @@ export class GameApp extends PIXI.Application<HTMLCanvasElement> {
         this.ui = this.container.addChild(new UI())
 
         this.container.eventMode = "dynamic"
+
         this.container.onpointermove = e => {
+          if (this.keyboardControll) return
+
           const localPos = e.getLocalPosition(this.container)
           if (localPos.x > CANVAS_WIDTH / 2)
             this.pingPong.greenPlayer.y = localPos.y - (PLAYER_HEIGHT / 2)
@@ -58,7 +64,13 @@ export class GameApp extends PIXI.Application<HTMLCanvasElement> {
             this.pingPong.redPlayer.y = localPos.y - (PLAYER_HEIGHT / 2)
         }
 
-        this.waitingForReady = false
+        this.container.onpointerdown = () => {
+          this.keyboardControll = false
+          if (this.gameEnded)
+            this.restartGame()
+        }
+
+
 
 
         this.resizeRenderer()
@@ -66,14 +78,15 @@ export class GameApp extends PIXI.Application<HTMLCanvasElement> {
         this.startGame()
       })
 
-
+    this.keyboardControll = false
+    this.gameEnded = false
     PIXI.Ticker.shared.autoStart = false;
     PIXI.Ticker.shared.stop()
     document.body.onresize = () => this.resizeRenderer()
   }
 
-  startGame() {
-    const newPos = gameHandler.getNewBallStartPositionAndDirection()
+  startGame(throwTo: PlayerColor | "random" = "random") {
+    const newPos = gameHandler.getNewBallStartPositionAndDirection(throwTo)
     this.pingPong.ball.setPositionAndDirection(
       newPos.x,
       newPos.y,
@@ -87,6 +100,15 @@ export class GameApp extends PIXI.Application<HTMLCanvasElement> {
     }, 3000)
   }
 
+  restartGame() {
+    this.gameEnded = false
+    gameHandler.score.green = 0
+    gameHandler.score.red = 0
+    this.pingPong.ball.show()
+    this.ui.reset()
+    this.startGame()
+  }
+
   resizeRenderer() {
     if (!this || !this.renderer || !this.container)
       return
@@ -97,21 +119,24 @@ export class GameApp extends PIXI.Application<HTMLCanvasElement> {
   }
 
   onPlayerLose(player: PlayerColor) {
-    this.score[player == "red" ? "green" : "red"]++
-    this.ui.setScore(this.score)
-    
-    if (this.score["green"] == 10) {
-      PIXI.Ticker.shared.stop()
-      this.pingPong.ball.hide()
+    this.gameEnded = true
+    gameHandler.score[player == "red" ? "green" : "red"]++
+    this.ui.setScore(gameHandler.score)
+
+    if (gameHandler.score["green"] == WIN_CON) {
       this.ui.winMessage("green")
-      return
-    } if (this.score["red"] == 10) {
       PIXI.Ticker.shared.stop()
       this.pingPong.ball.hide()
+      this.gameEnded = true
+      return
+    } if (gameHandler.score["red"] == WIN_CON) {
       this.ui.winMessage("red")
+      PIXI.Ticker.shared.stop()
+      this.pingPong.ball.hide()
+      this.gameEnded = true
       return
     }
-    
-    this.startGame()
+
+    this.startGame(player == "red" ? "green" : "red")
   }
 }

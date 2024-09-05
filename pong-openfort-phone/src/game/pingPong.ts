@@ -1,9 +1,9 @@
 import * as PIXI from 'pixi.js'
-import { app } from '../main'
-import { myColor, PlayerColor } from '../playerColor'
-import { CANVAS_HEIGHT, CANVAS_WIDTH, KEY_CODE_DOWN, KEY_CODE_UP, PIXEL_SIZE, PLAYER_HEIGHT, PLAYER_MARGIN, PLAYER_WIDTH } from './app'
+import { myColor, otherColor, PlayerColor } from '../playerColor'
+import { CANVAS_HEIGHT, CANVAS_WIDTH, KEY_CODE_DOWN, KEY_CODE_DOWN_2, KEY_CODE_UP, KEY_CODE_UP_2, KEY_RESTART, PIXEL_SIZE, PLAYER_HEIGHT, PLAYER_MARGIN, PLAYER_WIDTH } from './app'
 import { Ball } from './ball'
 import { Player } from './player'
+import { app } from '../main'
 
 
 export class PingPong extends PIXI.Container {
@@ -25,9 +25,16 @@ export class PingPong extends PIXI.Container {
 
     this.ball = this.addChild(new Ball())
 
-    
+
 
     onkeydown = k => {
+      if (k.key == KEY_RESTART) {
+        app.restartGame()
+        return
+      }
+
+      app.keyboardControll = true
+
       console.log("'" + k.key + "'")
       if (k.key == KEY_CODE_UP) {
         this.movePlayer(myColor, -PIXEL_SIZE)
@@ -35,10 +42,14 @@ export class PingPong extends PIXI.Container {
       if (k.key == KEY_CODE_DOWN) {
         this.movePlayer(myColor, PIXEL_SIZE)
       }
-      if (k.key == ' ' && app.waitingForReady) {
-        app.ui.setText("Waiting others")
-        app.waitingForReady = false
+
+      if (k.key == KEY_CODE_UP_2) {
+        this.movePlayer(otherColor, -PIXEL_SIZE)
       }
+      if (k.key == KEY_CODE_DOWN_2) {
+        this.movePlayer(otherColor, PIXEL_SIZE)
+      }
+
     }
   }
 
