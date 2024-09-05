@@ -5,16 +5,21 @@ Create a two-player Pong-like game where players interact through separate brows
 
 ---
 ## Folder structure
+
 There are 3 folders in this project
 * openfort-opener: This is the project in charge of starting the game.
 * pong-openfort: This is the game itself. It comunicates with openfort-opener with `window.opener.postMessage` as requested.
 * pong-openfort-phone: This is the pong game and logic designed to use with a touch screen or mouse. This project is uploaded at [martimayo.com/pong/](https://www.martimayo.com/pong/)⁠
 
 ## Start project
+
 This project is installed `yarn` and uses `vite` as a building tool.
 To start use `yarn install` and then `yarn dev` to start the local development server.
+
 ---
+
 ## Challenge Requirements
+
 ### Game Mechanics
 1.⁠ ⁠Implement a basic Pong game with two paddles and a ball.
 2.⁠ ⁠Each player controls one paddle using keyboard inputs.
