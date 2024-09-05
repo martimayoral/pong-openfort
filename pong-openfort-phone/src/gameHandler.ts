@@ -19,12 +19,14 @@ export class GameHandler {
     // shoot to one player or the other (50%)
     ballRotation += (throwTo == "random" && Math.random() < 0.5) || throwTo == "red" ? Math.PI : 0
 
+    const scoreSpeed = 1 + 0.5 * (this.score.red + this.score.green)
 
+    console.log(this.ballSpeed * scoreSpeed)
     return {
       x: 0,
       y: 0,
-      dx: this.ballSpeed * Math.sin(ballRotation),
-      dy: this.ballSpeed * Math.cos(ballRotation)
+      dx: this.ballSpeed * Math.sin(ballRotation) * scoreSpeed,
+      dy: this.ballSpeed * Math.cos(ballRotation) * scoreSpeed
     }
   }
 
