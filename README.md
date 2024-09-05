@@ -16,6 +16,10 @@ There are 3 folders in this project
 This project is installed `yarn` and uses `vite` as a building tool.
 To start use `yarn install` and then `yarn dev` to start the local development server.
 
+## Telegram bot
+
+For the bonus feature i opened a telegram bot that sends you a link to the game. The username is @MartiMaoyoPongBot
+
 ---
 
 ## Challenge Requirements
