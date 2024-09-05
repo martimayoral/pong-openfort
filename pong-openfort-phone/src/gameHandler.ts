@@ -38,14 +38,6 @@ export class GameHandler {
     scoreElements[player].textContent = score + ""
   }
 
-  // startRound(throwTo: PlayerColor | "random" = "random") {
-
-  //   const newBallPositionAndDirection = this.getNewBallStartPositionAndDirection(throwTo)
-  //   playerHandler.allPlayers.forEach(p => {
-  //     sendMessage(p, { id: "host", type: "start", ...newBallPositionAndDirection })
-  //     sendMessage(p, { id: "host", type: "score", score: this.score })
-  //   })
-  // }
 
   resetAll() {
     this.setScore("green", 0)

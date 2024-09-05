@@ -1,10 +1,9 @@
 import * as PIXI from 'pixi.js'
-import { CANVAS_HEIGHT, CANVAS_WIDTH, KEY_CODE_DOWN, KEY_CODE_UP, PIXEL_SIZE, PLAYER_HEIGHT, PLAYER_MARGIN, PLAYER_WIDTH } from './app'
-import { Player } from './player'
-import { Ball } from './ball'
-import { messageHeader, sendMessage } from '../sendMessage'
-import { myColor, PlayerColor } from '../playerColor'
 import { app } from '../main'
+import { myColor, PlayerColor } from '../playerColor'
+import { CANVAS_HEIGHT, CANVAS_WIDTH, KEY_CODE_DOWN, KEY_CODE_UP, PIXEL_SIZE, PLAYER_HEIGHT, PLAYER_MARGIN, PLAYER_WIDTH } from './app'
+import { Ball } from './ball'
+import { Player } from './player'
 
 
 export class PingPong extends PIXI.Container {
@@ -37,7 +36,6 @@ export class PingPong extends PIXI.Container {
         this.movePlayer(myColor, PIXEL_SIZE)
       }
       if (k.key == ' ' && app.waitingForReady) {
-        sendMessage({ ...messageHeader, type: 'ready' })
         app.ui.setText("Waiting others")
         app.waitingForReady = false
       }
@@ -49,7 +47,6 @@ export class PingPong extends PIXI.Container {
     const y = Math.max(0, Math.min(playerToMove.y + offset, CANVAS_HEIGHT - PLAYER_HEIGHT))
     // ease.add(playerToMove, { y }, { duration: 100 })
     playerToMove.y = y
-    // sendMessage({ ...messageHeader, type: 'player position', y })
   }
 
 
